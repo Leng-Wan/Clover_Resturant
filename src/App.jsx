@@ -1,8 +1,26 @@
+import http from './http';
+import useFetch from './hook/useFetch';
 export default function App()
 {
+    const {data, error, loading} = useFetch(http, []);
+    if(loading)
+    {
+        return <p>Loading...</p>
+    }
+    if(error)
+    {
+        return <p>{error.error}</p>
+    }
+    if(data.length ===0)
+    {
+        return <p>No Data Found!</p>
+    }
     return (
         <div>
-            <p>Welcome To Clover Resturant......</p>
+            <h1>Meals</h1>
+            <ul>
+                {data.map(meal => <li key={meal.id}>{meal.name}</li>)}
+            </ul>
         </div>
     )
 }
