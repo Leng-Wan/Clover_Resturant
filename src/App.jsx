@@ -1,5 +1,6 @@
 import http from './http';
 import useFetch from './hook/useFetch';
+import MealLists from './components/MealLists';
 export default function App()
 {
     const {data, error, loading} = useFetch(http, []);
@@ -18,9 +19,7 @@ export default function App()
     return (
         <div>
             <h1>Meals</h1>
-            <ul>
-                {data.map(meal => <li key={meal.id}>{meal.name}</li>)}
-            </ul>
+            <MealLists meals={data}/>
         </div>
     )
 }
