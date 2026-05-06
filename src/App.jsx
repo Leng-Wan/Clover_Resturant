@@ -1,9 +1,32 @@
+import {useState} from 'react'
 import http from './http';
 import useFetch from './hook/useFetch';
 import MealLists from './components/MealLists';
+import Cart from './components/Cart';
 export default function App()
 {
     const {data, error, loading} = useFetch(http, []);
+    const [cartItems, setCartItems] = useState([])
+
+    function handleAddToCart(mealItem)
+    {
+        const exitingItem = cartItems.find(item => item.id === mealItem.id);
+        if(!exitingItem)
+        {
+            setCartItems(prev => [...prev, {...mealItem, quantity: 1}]);
+        }
+        else 
+        {
+            const updatedCartItems = cartItems.map(item => {
+                if(item.id === mealItem.id)
+                {
+                    return {...item, quantity: item.quantity + 1}
+                }
+                return item;
+            })
+            setCartItems(updatedCartItems);
+        }
+    }
     if(loading)
     {
         return <p>Loading...</p>
@@ -19,7 +42,8 @@ export default function App()
     return (
         <div>
             <h1>Meals</h1>
-            <MealLists meals={data}/>
+            <Cart cartItems={cartItems} />
+            <MealLists meals={data} onAddToCart={handleAddToCart} />
         </div>
     )
 }

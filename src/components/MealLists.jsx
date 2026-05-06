@@ -1,4 +1,4 @@
-export default function MealsList({meals})
+export default function MealsList({meals, onAddToCart})
 {
   return(
     <div>
@@ -8,6 +8,7 @@ export default function MealsList({meals})
         <h3>{meal.name}</h3>
         <h4>${meal.price}</h4>
         <p>{meal.description}</p>
+        <button onClick={() => onAddToCart(meal)}>Add to Cart</button>
       </div>
       ))}
     </div>
