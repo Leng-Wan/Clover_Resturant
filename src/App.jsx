@@ -1,9 +1,10 @@
 import {useState, useRef} from 'react'
 
-import http from './http';
+import {http,postOrder} from './http';
 import useFetch from './hook/useFetch';
 import MealLists from './components/MealLists';
 import Cart from './components/Cart';
+import CheckOutForm from './components/CheckOutForm';
 export default function App()
 {
     const {data, error, loading} = useFetch(http, []);
@@ -47,6 +48,20 @@ export default function App()
     {
         return <p>No Data Found!</p>
     }
+
+    async function handleCheckOut(orderData)
+    {
+       await postOrder({
+        order:{
+            customer: orderData,
+            items: cartItems
+        }
+       })
+         setCartItems([]);
+         setTimeout(() => {
+    dialog.current.close();
+}, 2000) // 2 seconds
+    }
     return (
         <div>
             <header>
@@ -56,7 +71,7 @@ export default function App()
                 </nav>
             </header>
             <h1>Meals</h1>
-            <Cart cartItems={cartItems} ref={dialog}/>
+            <Cart cartItems={cartItems} ref={dialog} onCheckOut={handleCheckOut}/>
             <MealLists meals={data} onAddToCart={handleAddToCart} />
         </div>
     )
